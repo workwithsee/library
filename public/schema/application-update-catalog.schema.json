@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "S.E.E. authenticated application update catalog",
+  "description": "TUF target catalog.json. This document must be authenticated by the client's pinned root before use.",
+  "type": "object",
+  "required": ["schema", "releases"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": 1 },
+    "releases": { "type": "array", "maxItems": 1024, "items": { "$ref": "#/$defs/release" } }
+  },
+  "$defs": {
+    "digest": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "identity": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$", "not": { "enum": [".", ".."] } },
+    "asset": {
+      "type": "object", "additionalProperties": false,
+      "required": ["name", "url", "length", "sha256", "unpacked_length"],
+      "properties": {
+        "name": { "$ref": "#/$defs/identity" },
+        "url": { "type": "string", "pattern": "^https://github\\.com/workwithsee/releases/releases/download/" },
+        "length": { "type": "integer", "minimum": 1, "maximum": 2147483648 },
+        "sha256": { "$ref": "#/$defs/digest" },
+        "unpacked_length": { "type": "integer", "minimum": 1, "maximum": 4294967296 }
+      }
+    },
+    "release": {
+      "type": "object", "additionalProperties": false,
+      "required": ["candidate_id", "app_version", "release_generation", "tracks", "github_tag", "github_prerelease", "os", "architecture", "installation_kind", "scope", "minimum_os", "minimum_os_version", "package_format", "archive_layout", "asset", "runtime_manifest_sha256", "build_identity", "qualification_sha256", "native_identity", "data_read_min", "data_read_max", "data_write_version", "rollback_safe", "updater_protocol", "windows_product_version", "windows_product_code", "windows_upgrade_code", "withdrawn"],
+      "properties": {
+        "qualification_scope": { "enum": ["discovery", "automatic"], "default": "automatic", "description": "Discovery announces a signed manual installer and cannot authorise automatic staging or application." },
+        "candidate_id": { "$ref": "#/$defs/identity" },
+        "app_version": { "type": "string", "minLength": 1 },
+        "release_generation": { "type": "integer", "minimum": 1 },
+        "tracks": { "type": "array", "minItems": 1, "maxItems": 2, "uniqueItems": true, "items": { "enum": ["stable", "beta"] } },
+        "github_tag": { "$ref": "#/$defs/identity" },
+        "github_prerelease": { "type": ["boolean", "null"] },
+        "os": { "enum": ["linux", "macos", "windows"] },
+        "architecture": { "enum": ["x86_64", "aarch64"] },
+        "installation_kind": { "enum": ["linux-user-archive", "macos-user-bundle", "windows-user-msi"] },
+        "scope": { "const": "user" },
+        "minimum_os": { "type": "string", "minLength": 1 },
+        "minimum_os_version": { "type": "string", "minLength": 1 },
+        "package_format": { "enum": ["tar.gz", "zip", "msi", "desktop"] },
+        "archive_layout": { "type": "string", "minLength": 1 },
+        "asset": { "$ref": "#/$defs/asset" },
+        "runtime_manifest_sha256": { "$ref": "#/$defs/digest" },
+        "build_identity": { "type": "string", "minLength": 1 },
+        "qualification_sha256": { "$ref": "#/$defs/digest" },
+        "native_identity": { "type": "string", "minLength": 1 },
+        "data_read_min": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "data_read_max": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "data_write_version": { "type": "integer", "minimum": 0, "maximum": 4294967295 },
+        "rollback_safe": { "type": "boolean" },
+        "updater_protocol": { "const": 1 },
+        "windows_product_version": { "type": ["array", "null"], "minItems": 3, "maxItems": 3, "items": { "type": "integer", "minimum": 0, "maximum": 65535 } },
+        "windows_product_code": { "type": ["string", "null"] },
+        "windows_upgrade_code": { "type": ["string", "null"] },
+        "withdrawn": { "type": "boolean" }
+      },
+      "allOf": [{
+        "if": { "properties": { "package_format": { "const": "desktop" } } },
+        "then": { "required": ["qualification_scope"], "properties": { "qualification_scope": { "const": "discovery" }, "os": { "const": "linux" }, "installation_kind": { "const": "linux-user-archive" }, "archive_layout": { "const": "linux-standalone-desktop-v1" }, "rollback_safe": { "const": false }, "data_read_min": { "const": 0 }, "data_read_max": { "const": 0 }, "data_write_version": { "const": 0 } } }
+      }]
+    }
+  }
+}

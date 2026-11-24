@@ -2152,6 +2152,7 @@ dependencies = [
  "chrono",
  "hex",
  "jsonschema",
+ "libc",
  "s_e_e_shapes",
  "s_e_e_transient_store",
  "serde",
@@ -2304,6 +2305,7 @@ version = "1.0.7437"
 name = "s_e_e_transient_store"
 version = "1.0.7437"
 dependencies = [
+ "cc",
  "libc",
  "rusqlite",
  "s_e_e_demo_workspace",
@@ -2330,6 +2332,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha2",
+ "tempfile",
  "thiserror",
  "tokio",
  "tokio-util",

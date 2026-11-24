@@ -3,5 +3,39 @@
   "$id": "https://workwithsee.github.io/library/schema/global-config.schema.json",
   "title": "Global ~/.s_e_e/config.json",
   "type": "object",
+  "properties": {
+    "update_feed": {
+      "description": "Local update feed and public trust root, read when S.E.E. starts.",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "required": ["github_releases"],
+          "properties": {
+            "github_releases": { "const": "https://github.com/workwithsee/releases/releases" },
+            "catalog_base": { "const": "https://raw.githubusercontent.com/workwithsee/releases/update-feed/updates/v1/" },
+            "bootstrap_root_json": { "type": "string", "minLength": 1 },
+            "bootstrap_root_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+          },
+          "dependencies": {
+            "bootstrap_root_json": ["bootstrap_root_sha256", "catalog_base"],
+            "bootstrap_root_sha256": ["bootstrap_root_json", "catalog_base"]
+          },
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "required": ["primary", "mirror", "bootstrap_root_json", "bootstrap_root_sha256"],
+          "properties": {
+            "primary": { "type": "string", "pattern": "^https://[^/?#]+/(?:[^?#]*/)?updates/v1/$" },
+            "mirror": { "type": "string", "pattern": "^https://[^/?#]+/(?:[^?#]*/)?updates/v1/$" },
+            "bootstrap_root_json": { "type": "string", "minLength": 1 },
+            "bootstrap_root_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
   "additionalProperties": true
 }

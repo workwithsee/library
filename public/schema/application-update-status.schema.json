@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Application update check status",
+  "type": "object",
+  "required": ["track", "last_checked", "outcome"],
+  "properties": {
+    "track": { "enum": ["stable", "beta"] },
+    "last_checked": { "type": ["integer", "null"], "description": "Unix seconds of the last successful check" },
+    "outcome": {
+      "oneOf": [
+        {
+          "enum": ["never_checked", "checking", "current", "unsupported", "unknown_installation", "stale", "offline", "verification_failed", "clock_invalid", "storage_unavailable", "unconfigured", "manual_releases"]
+        },
+        {
+          "type": "object",
+          "required": ["available"],
+          "properties": {
+            "available": {
+              "type": "object",
+              "required": ["version"],
+              "properties": { "version": { "type": "string", "minLength": 1 } },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}

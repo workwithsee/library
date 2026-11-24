@@ -62,7 +62,8 @@
       "type": "boolean"
     },
     "mcp_auth_enabled": {
-      "type": "boolean"
+      "type": "boolean",
+      "description": "Requires an MCP bearer grant when server sign-in is also enabled."
     },
     "session_ttl_hours": {
       "type": [

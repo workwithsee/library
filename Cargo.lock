@@ -2074,7 +2074,7 @@ checksum = "9774ba4a74de5f7b1c1451ed6cd5285a32eddb5cccb8cc655a4e50009e06477f"
 
 [[package]]
 name = "s_e_e_command"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "libc",
  "s_e_e_shapes",
@@ -2084,7 +2084,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_core"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "argon2",
  "async-trait",
@@ -2124,7 +2124,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_demo_workspace"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "fuser",
  "libc",
@@ -2136,7 +2136,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_git"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "libc",
  "s_e_e_subprocess_env",
@@ -2147,7 +2147,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_hub"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "chrono",
  "hex",
@@ -2167,7 +2167,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_hub_index"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "chrono",
  "regex",
@@ -2184,7 +2184,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_knowledge"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "chrono",
  "fd-lock",
@@ -2206,7 +2206,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_library_ops"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "base64 0.22.1",
  "chrono",
@@ -2226,7 +2226,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_logs"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "chrono",
  "libc",
@@ -2247,7 +2247,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_markdown"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "html-escape",
  "markdown",
@@ -2259,7 +2259,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_shapes"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "blake3",
  "chrono",
@@ -2274,7 +2274,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_stories"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "chrono",
  "fd-lock",
@@ -2292,18 +2292,18 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_subprocess_env"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "s_e_e_shapes",
 ]
 
 [[package]]
 name = "s_e_e_tool_reference"
-version = "0.1.8"
+version = "0.1.9"
 
 [[package]]
 name = "s_e_e_transient_store"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "cc",
  "libc",
@@ -2315,7 +2315,7 @@ dependencies = [
 
 [[package]]
 name = "s_e_e_workflow_runtime"
-version = "0.1.8"
+version = "0.1.9"
 dependencies = [
  "async-trait",
  "chrono",

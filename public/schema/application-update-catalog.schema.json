@@ -1,7 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://workwithsee.github.io/library/schema/application-update-catalog.schema.json",
   "title": "S.E.E. authenticated application update catalog",
-  "description": "TUF targets catalog.json and optional catalog-v2.json. Current clients prefer the authenticated v2 target. The original target projects automatic desktop entries into discovery-only listings for older clients; both bind identical qualified package bytes. Each target must be authenticated by the client's pinned root before use.",
+  "description": "TUF targets catalog.json, catalog-v2.json and catalog-v3.json. PKG-capable clients prefer authenticated v3, then v2, then the original target. V3 carries qualified native macOS home packages. Older views omit those packages, preserving Linux rows; the original target also projects automatic desktop entries into discovery-only listings. Every target is authenticated by the same pinned root before use.",
   "type": "object",
   "required": ["schema", "releases"],
   "additionalProperties": false,
@@ -40,7 +41,7 @@
         "scope": { "const": "user" },
         "minimum_os": { "type": "string", "minLength": 1 },
         "minimum_os_version": { "type": "string", "minLength": 1 },
-        "package_format": { "enum": ["tar.gz", "zip", "msi", "desktop"] },
+        "package_format": { "enum": ["tar.gz", "zip", "msi", "desktop", "pkg"] },
         "archive_layout": { "type": "string", "minLength": 1 },
         "asset": { "$ref": "#/$defs/asset" },
         "runtime_manifest_sha256": { "$ref": "#/$defs/digest" },
@@ -66,6 +67,21 @@
             { "properties": { "qualification_scope": { "const": "discovery" }, "archive_layout": { "const": "linux-standalone-desktop-v1" }, "rollback_safe": { "const": false }, "data_read_min": { "const": 0 }, "data_read_max": { "const": 0 }, "data_write_version": { "const": 0 } } },
             { "properties": { "qualification_scope": { "const": "automatic" }, "archive_layout": { "const": "linux-standalone-desktop-v2" }, "data_read_min": { "type": "integer", "minimum": 1 } } }
           ]
+        }
+      }, {
+        "if": { "properties": { "package_format": { "const": "pkg" } } },
+        "then": {
+          "properties": {
+            "os": { "const": "macos" },
+            "installation_kind": { "const": "macos-user-bundle" },
+            "archive_layout": { "const": "macos-home-package-v1" },
+            "native_identity": { "const": "6UUQ92953S/com.see.app" },
+            "build_identity": { "type": "string", "pattern": "^runtime-[a-f0-9]{64}$" },
+            "windows_product_version": { "type": "null" },
+            "windows_product_code": { "type": "null" },
+            "windows_upgrade_code": { "type": "null" },
+            "asset": { "properties": { "name": { "type": "string", "pattern": "^see-macos-(aarch64|x86_64)-[0-9]+\\.[0-9]+\\.[0-9]+[A-Za-z0-9.-]*-installer\\.pkg$" } } }
+          }
         }
       }]
     }

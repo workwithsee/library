@@ -121,3 +121,42 @@ fn research_markdown_example_and_obsolete_fields() {
     assert!(!operations.contains_key("knowledge_research_profile_get"));
     assert!(!operations.contains_key("knowledge_research_source_put"));
 }
+
+#[test]
+fn update_catalog_accepts_home_package_and_rejects_shared_or_foreign_identity() {
+    let validator = jsonschema::validator_for(&public("application-update-catalog")).unwrap();
+    let digest = "a".repeat(64);
+    let release = json!({
+        "qualification_scope":"automatic", "candidate_id":"macos-g2",
+        "app_version":"1.0.2", "release_generation":2, "tracks":["stable"],
+        "github_tag":"v1.0.2-macos", "github_prerelease":false, "os":"macos",
+        "architecture":"aarch64", "installation_kind":"macos-user-bundle", "scope":"user",
+        "minimum_os":"macos", "minimum_os_version":"12.0.0", "package_format":"pkg",
+        "archive_layout":"macos-home-package-v1",
+        "asset": {"name":"see-macos-aarch64-1.0.2-installer.pkg",
+            "url":"https://github.com/workwithsee/releases/releases/download/v1.0.2-macos/see-macos-aarch64-1.0.2-installer.pkg",
+            "length":100, "sha256":digest, "unpacked_length":200},
+        "runtime_manifest_sha256":digest, "build_identity":format!("runtime-{digest}"),
+        "qualification_sha256":digest, "native_identity":"6UUQ92953S/com.see.app",
+        "data_read_min":1, "data_read_max":2, "data_write_version":2,
+        "rollback_safe":true, "updater_protocol":1,
+        "windows_product_version":null, "windows_product_code":null,
+        "windows_upgrade_code":null, "withdrawn":false
+    });
+    let catalog = json!({"schema":1,"releases":[release]});
+    assert!(validator.is_valid(&catalog));
+    for (field, value) in [
+        ("os", "linux"),
+        ("installation_kind", "macos-system-package"),
+        ("archive_layout", "macos-shared-package-v1"),
+        ("native_identity", "FOREIGN/com.see.app"),
+        ("build_identity", "unbound"),
+    ] {
+        let mut invalid = catalog.clone();
+        invalid["releases"][0][field] = json!(value);
+        assert!(!validator.is_valid(&invalid), "{field}");
+    }
+    let mut shared = catalog;
+    shared["releases"][0]["asset"]["name"] = json!("see-system-installer.pkg");
+    assert!(!validator.is_valid(&shared));
+}

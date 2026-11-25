@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "S.E.E. authenticated application update catalog",
-  "description": "TUF target catalog.json. This document must be authenticated by the client's pinned root before use.",
+  "description": "TUF targets catalog.json and optional catalog-v2.json. Current clients prefer the authenticated v2 target. The original target projects automatic desktop entries into discovery-only listings for older clients; both bind identical qualified package bytes. Each target must be authenticated by the client's pinned root before use.",
   "type": "object",
   "required": ["schema", "releases"],
   "additionalProperties": false,
@@ -59,7 +59,14 @@
       },
       "allOf": [{
         "if": { "properties": { "package_format": { "const": "desktop" } } },
-        "then": { "required": ["qualification_scope"], "properties": { "qualification_scope": { "const": "discovery" }, "os": { "const": "linux" }, "installation_kind": { "const": "linux-user-archive" }, "archive_layout": { "const": "linux-standalone-desktop-v1" }, "rollback_safe": { "const": false }, "data_read_min": { "const": 0 }, "data_read_max": { "const": 0 }, "data_write_version": { "const": 0 } } }
+        "then": {
+          "required": ["qualification_scope"],
+          "properties": { "os": { "const": "linux" }, "installation_kind": { "const": "linux-user-archive" } },
+          "oneOf": [
+            { "properties": { "qualification_scope": { "const": "discovery" }, "archive_layout": { "const": "linux-standalone-desktop-v1" }, "rollback_safe": { "const": false }, "data_read_min": { "const": 0 }, "data_read_max": { "const": 0 }, "data_write_version": { "const": 0 } } },
+            { "properties": { "qualification_scope": { "const": "automatic" }, "archive_layout": { "const": "linux-standalone-desktop-v2" }, "data_read_min": { "type": "integer", "minimum": 1 } } }
+          ]
+        }
       }]
     }
   }

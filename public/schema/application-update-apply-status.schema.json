@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "S.E.E. update application status",
+  "type": "object",
+  "required": ["phase", "can_update", "received", "total"],
+  "properties": {
+    "phase": { "enum": ["idle", "downloading", "preparing", "restarting", "deferred", "cancelled", "failed", "recovery_required", "succeeded", "rolled_back"] },
+    "can_update": { "type": "boolean" },
+    "received": { "type": "integer", "minimum": 0 },
+    "total": { "type": "integer", "minimum": 0 }
+  },
+  "additionalProperties": false
+}
